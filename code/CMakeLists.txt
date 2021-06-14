@@ -933,26 +933,27 @@ ELSE()
   SOURCE_GROUP(Contrib\\unzip FILES ${unzip_SRCS})
 ENDIF()
 
-# zip (https://github.com/kuba--/zip)
-IF(ASSIMP_HUNTER_ENABLED)
-  hunter_add_package(zip)
-  find_package(zip CONFIG REQUIRED)
-ELSE()
-  SET( ziplib_SRCS
-    ../contrib/zip/src/miniz.h
-    ../contrib/zip/src/zip.c
-    ../contrib/zip/src/zip.h
-  )
-
-  # TODO if cmake required version has been updated to >3.12.0, collapse this to the second case only
-  if(${CMAKE_VERSION} VERSION_LESS "3.12.0")
-  	add_definitions(-DMINIZ_USE_UNALIGNED_LOADS_AND_STORES=0)
-  else()
-  	add_compile_definitions(MINIZ_USE_UNALIGNED_LOADS_AND_STORES=0)
-  endif()
-
-  SOURCE_GROUP( ziplib FILES ${ziplib_SRCS} )
-ENDIF()
+# HARFANG: miniz already exists in harfang
+## zip (https://github.com/kuba--/zip)
+#IF(ASSIMP_HUNTER_ENABLED)
+#  hunter_add_package(zip)
+#  find_package(zip CONFIG REQUIRED)
+#ELSE()
+#  SET( ziplib_SRCS
+#    ../contrib/zip/src/miniz.h
+#    ../contrib/zip/src/zip.c
+#    ../contrib/zip/src/zip.h
+#  )
+#
+#  # TODO if cmake required version has been updated to >3.12.0, collapse this to the second case only
+#  if(${CMAKE_VERSION} VERSION_LESS "3.12.0")
+#  	add_definitions(-DMINIZ_USE_UNALIGNED_LOADS_AND_STORES=0)
+#  else()
+#  	add_compile_definitions(MINIZ_USE_UNALIGNED_LOADS_AND_STORES=0)
+#  endif()
+#
+#  SOURCE_GROUP( ziplib FILES ${ziplib_SRCS} )
+#ENDIF()
 
 # openddlparser
 IF(ASSIMP_HUNTER_ENABLED)
@@ -1136,9 +1137,6 @@ IF (MSVC)
 ELSE()
   TARGET_COMPILE_OPTIONS(assimp PRIVATE -Werror)
 ENDIF()
-
-# adds C_FLAGS required to compile zip.c on old GCC 4.x compiler
-TARGET_COMPILE_FEATURES(assimp PUBLIC c_std_99)
 
 TARGET_INCLUDE_DIRECTORIES ( assimp PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
